@@ -365,6 +365,12 @@ def test_get_mobility_recommendations(token):
     assert response.status_code == 200, f"Get mobility recommendations failed with status {response.status_code}: {response.text}"
     recommendations = response.json()
     assert isinstance(recommendations, dict), "Recommendations is not a dictionary"
+    # If no assessment has been done, we should get general recommendations
+    if "message" in recommendations:
+        assert "general_exercises" in recommendations, "No general exercises in recommendations"
+    # If assessment has been done, we should get personalized recommendations
+    else:
+        assert "recommended_exercises" in recommendations, "No recommended exercises in recommendations"
     return recommendations
 
 # 9. Test Enhanced Social Features
