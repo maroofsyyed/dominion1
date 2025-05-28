@@ -842,6 +842,262 @@ async def get_leaderboard():
     
     return leaderboard
 
+# ========== ENHANCED MOBILITY ROUTES ==========
+
+@api_router.post("/mobility/assessments")
+async def create_mobility_assessment(assessment: MobilityAssessment, current_user: User = Depends(get_current_user)):
+    assessment.user_id = current_user.id
+    await db.mobility_assessments.insert_one(assessment.dict())
+    
+    # Award points for assessment completion
+    await db.users.update_one(
+        {"id": current_user.id},
+        {"$inc": {"points": 50}}
+    )
+    
+    return assessment
+
+@api_router.get("/mobility/assessments")
+async def get_user_mobility_assessments(current_user: User = Depends(get_current_user)):
+    assessments = await db.mobility_assessments.find({"user_id": current_user.id}).sort("date_taken", -1).to_list(1000)
+    return [MobilityAssessment(**assessment) for assessment in assessments]
+
+@api_router.get("/mobility/assessments/latest")
+async def get_latest_mobility_assessment(current_user: User = Depends(get_current_user)):
+    assessment = await db.mobility_assessments.find_one(
+        {"user_id": current_user.id},
+        sort=[("date_taken", -1)]
+    )
+    if not assessment:
+        return None
+    return MobilityAssessment(**assessment)
+
+@api_router.get("/mobility/recommendations")
+async def get_mobility_recommendations(current_user: User = Depends(get_current_user)):
+    # Get latest assessment
+    latest_assessment = await db.mobility_assessments.find_one(
+        {"user_id": current_user.id},
+        sort=[("date_taken", -1)]
+    )
+    
+    if not latest_assessment:
+        # Return general mobility exercises for beginners
+        exercises = await db.mobility_exercises.find({"difficulty": "Beginner"}).to_list(5)
+        return {
+            "message": "Complete a mobility assessment to get personalized recommendations",
+            "general_exercises": [MobilityExercise(**ex) for ex in exercises]
+        }
+    
+    # Get recommended exercises based on assessment
+    recommendations = []
+    for area in latest_assessment.get("areas_of_concern", []):
+        exercises = await db.mobility_exercises.find({"target_areas": area}).limit(3).to_list(3)
+        recommendations.extend(exercises)
+    
+    return {
+        "assessment_based": True,
+        "recommended_exercises": [MobilityExercise(**ex) for ex in recommendations[:6]]
+    }
+
+# ========== ENHANCED SOCIAL FEATURES ==========
+
+@api_router.post("/users/follow/{user_id}")
+async def follow_user(user_id: str, current_user: User = Depends(get_current_user)):
+    if user_id == current_user.id:
+        raise HTTPException(status_code=400, detail="Cannot follow yourself")
+    
+    # Check if user exists
+    target_user = await db.users.find_one({"id": user_id})
+    if not target_user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Create connection
+    connection = UserConnection(follower_id=current_user.id, following_id=user_id)
+    await db.user_connections.insert_one(connection.dict())
+    
+    # Update user following/followers lists
+    await db.users.update_one(
+        {"id": current_user.id},
+        {"$addToSet": {"following": user_id}}
+    )
+    await db.users.update_one(
+        {"id": user_id},
+        {"$addToSet": {"followers": current_user.id}}
+    )
+    
+    return {"message": "Successfully followed user"}
+
+@api_router.delete("/users/unfollow/{user_id}")
+async def unfollow_user(user_id: str, current_user: User = Depends(get_current_user)):
+    # Remove connection
+    await db.user_connections.delete_one({
+        "follower_id": current_user.id,
+        "following_id": user_id
+    })
+    
+    # Update user following/followers lists
+    await db.users.update_one(
+        {"id": current_user.id},
+        {"$pull": {"following": user_id}}
+    )
+    await db.users.update_one(
+        {"id": user_id},
+        {"$pull": {"followers": current_user.id}}
+    )
+    
+    return {"message": "Successfully unfollowed user"}
+
+@api_router.get("/users/search")
+async def search_users(q: str = "", interests: str = "", current_user: User = Depends(get_current_user)):
+    query = {}
+    
+    if q:
+        query["$or"] = [
+            {"username": {"$regex": q, "$options": "i"}},
+            {"full_name": {"$regex": q, "$options": "i"}}
+        ]
+    
+    if interests:
+        interest_list = interests.split(",")
+        query["interests"] = {"$in": interest_list}
+    
+    # Exclude current user
+    query["id"] = {"$ne": current_user.id}
+    
+    users = await db.users.find(query).limit(20).to_list(20)
+    return [{
+        "id": user["id"],
+        "username": user["username"],
+        "full_name": user["full_name"],
+        "profile_photo": user.get("profile_photo"),
+        "interests": user.get("interests", []),
+        "fitness_level": user.get("fitness_level", "Beginner"),
+        "points": user.get("points", 0)
+    } for user in users]
+
+@api_router.get("/users/{user_id}/profile")
+async def get_user_profile(user_id: str, current_user: User = Depends(get_current_user)):
+    user = await db.users.find_one({"id": user_id})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Check privacy settings
+    if user_id != current_user.id and not user.get("privacy_settings", {}).get("profile_public", True):
+        raise HTTPException(status_code=403, detail="Profile is private")
+    
+    # Get user's recent progress (if public)
+    recent_progress = []
+    if user_id == current_user.id or user.get("privacy_settings", {}).get("progress_public", True):
+        progress = await db.user_progress.find({"user_id": user_id}).sort("date", -1).limit(5).to_list(5)
+        recent_progress = [UserProgress(**p) for p in progress]
+    
+    return {
+        "id": user["id"],
+        "username": user["username"],
+        "full_name": user["full_name"],
+        "profile_photo": user.get("profile_photo"),
+        "interests": user.get("interests", []),
+        "fitness_level": user.get("fitness_level", "Beginner"),
+        "points": user.get("points", 0),
+        "badges": user.get("badges", []),
+        "achievements": user.get("achievements", []),
+        "streak_count": user.get("streak_count", 0),
+        "followers_count": len(user.get("followers", [])),
+        "following_count": len(user.get("following", [])),
+        "is_following": current_user.id in user.get("followers", []),
+        "recent_progress": recent_progress
+    }
+
+# ========== CHALLENGES & GAMIFICATION ==========
+
+@api_router.get("/challenges")
+async def get_active_challenges():
+    now = datetime.utcnow()
+    challenges = await db.challenges.find({
+        "status": "active",
+        "start_date": {"$lte": now},
+        "end_date": {"$gte": now}
+    }).to_list(1000)
+    return [Challenge(**challenge) for challenge in challenges]
+
+@api_router.post("/challenges/{challenge_id}/join")
+async def join_challenge(challenge_id: str, current_user: User = Depends(get_current_user)):
+    challenge = await db.challenges.find_one({"id": challenge_id})
+    if not challenge:
+        raise HTTPException(status_code=404, detail="Challenge not found")
+    
+    if current_user.id in challenge.get("participants", []):
+        raise HTTPException(status_code=400, detail="Already participating in this challenge")
+    
+    await db.challenges.update_one(
+        {"id": challenge_id},
+        {"$addToSet": {"participants": current_user.id}}
+    )
+    
+    return {"message": "Successfully joined challenge"}
+
+@api_router.get("/achievements")
+async def get_available_achievements():
+    achievements = await db.achievements.find().to_list(1000)
+    return [Achievement(**achievement) for achievement in achievements]
+
+@api_router.get("/users/{user_id}/achievements")
+async def get_user_achievements(user_id: str):
+    user = await db.users.find_one({"id": user_id})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    return user.get("achievements", [])
+
+# ========== CHAT CHANNELS ==========
+
+@api_router.get("/chat/channels")
+async def get_chat_channels():
+    channels = await db.chat_channels.find().to_list(1000)
+    return [ChatChannel(**channel) for channel in channels]
+
+@api_router.post("/chat/channels/{channel_id}/join")
+async def join_chat_channel(channel_id: str, current_user: User = Depends(get_current_user)):
+    await db.chat_channels.update_one(
+        {"id": channel_id},
+        {"$addToSet": {"members": current_user.id}}
+    )
+    return {"message": "Joined channel successfully"}
+
+@api_router.get("/chat/channels/{channel_id}/messages")
+async def get_channel_messages(channel_id: str, limit: int = 50):
+    messages = await db.messages.find({"community_id": channel_id}).sort("timestamp", -1).limit(limit).to_list(limit)
+    return [Message(**message) for message in messages]
+
+# ========== ENHANCED ANALYTICS ==========
+
+@api_router.get("/analytics/progress")
+async def get_progress_analytics(current_user: User = Depends(get_current_user)):
+    # Get progress for last 30 days
+    thirty_days_ago = datetime.utcnow() - timedelta(days=30)
+    
+    progress = await db.user_progress.find({
+        "user_id": current_user.id,
+        "date": {"$gte": thirty_days_ago}
+    }).sort("date", 1).to_list(1000)
+    
+    # Calculate streaks and trends
+    workout_days = set()
+    exercise_counts = {}
+    
+    for p in progress:
+        workout_days.add(p["date"].date())
+        exercise_id = p["exercise_id"]
+        exercise_counts[exercise_id] = exercise_counts.get(exercise_id, 0) + 1
+    
+    return {
+        "total_workouts": len(progress),
+        "unique_workout_days": len(workout_days),
+        "most_practiced_exercises": sorted(exercise_counts.items(), key=lambda x: x[1], reverse=True)[:5],
+        "current_streak": current_user.streak_count,
+        "weekly_progress": len([p for p in progress if (datetime.utcnow() - p["date"]).days <= 7])
+    }
+
 # ========== WEBSOCKET ==========
 
 @app.websocket("/ws/chat/{community_id}")
