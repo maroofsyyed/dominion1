@@ -173,6 +173,56 @@ class Product(BaseModel):
     in_stock: bool = True
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
+class MobilityAssessment(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    assessment_type: str  # overhead_squat, shoulder_reach, ankle_dorsiflexion
+    score: int  # 0-3 scoring system
+    notes: Optional[str] = None
+    areas_of_concern: List[str] = []
+    recommendations: List[str] = []
+    date_taken: datetime = Field(default_factory=datetime.utcnow)
+
+class Challenge(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    description: str
+    type: str  # weekly, monthly, community
+    goal_type: str  # reps, time, consistency
+    goal_value: int
+    start_date: datetime
+    end_date: datetime
+    participants: List[str] = []
+    rewards: List[str] = []
+    created_by: str
+    status: str = "active"  # active, completed, cancelled
+
+class Achievement(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    description: str
+    category: str  # strength, consistency, social, mobility
+    criteria: Dict[str, Any]  # Requirements to unlock
+    badge_icon: str
+    points_reward: int
+    rarity: str = "common"  # common, rare, epic, legendary
+
+class UserConnection(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    follower_id: str
+    following_id: str
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+class ChatChannel(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    description: str
+    type: str  # general, workout_chat, mobility_chat, beginner_help
+    community_id: Optional[str] = None
+    members: List[str] = []
+    moderators: List[str] = []
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
 # ========== AUTH HELPERS ==========
 
 def hash_password(password: str) -> str:
