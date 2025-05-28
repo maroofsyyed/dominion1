@@ -819,6 +819,7 @@ const ExerciseDetailPage = ({ exerciseId }) => {
   const [progress, setProgress] = useState([]);
   const [logData, setLogData] = useState({ reps: '', sets: '', notes: '' });
   const [loading, setLoading] = useState(true);
+  const [unlockedDate] = useState(new Date().toLocaleDateString());
   const { user } = useAuth();
 
   useEffect(() => {
@@ -873,6 +874,11 @@ const ExerciseDetailPage = ({ exerciseId }) => {
     }
   };
 
+  const getNextExercise = () => {
+    const nextOrder = exercise.progression_order + 1;
+    return `Next: ${exercise.pillar} Level ${nextOrder}`;
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center">
@@ -903,7 +909,7 @@ const ExerciseDetailPage = ({ exerciseId }) => {
 
   return (
     <div className="min-h-screen bg-gray-900 pt-20">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -918,111 +924,190 @@ const ExerciseDetailPage = ({ exerciseId }) => {
               {exercise.skill_level}
             </span>
             <span className="text-gray-400">{exercise.pillar}</span>
+            <span className="text-gray-500">#{exercise.progression_order}</span>
           </div>
           
           <h1 className="text-4xl font-bold text-white mb-4">{exercise.name}</h1>
           <p className="text-xl text-gray-400 mb-6">{exercise.description}</p>
+
+          {/* Unlocked Status */}
+          <div className="flex items-center gap-6 mb-6">
+            <div className="flex items-center text-green-400">
+              <CheckCircle className="mr-2" size={20} />
+              <span>Unlocked on {unlockedDate}</span>
+            </div>
+            <div className="flex items-center text-blue-400">
+              <Target className="mr-2" size={20} />
+              <span>{getNextExercise()}</span>
+            </div>
+          </div>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Instructions */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="bg-gray-800 rounded-xl p-6"
-          >
-            <h2 className="text-2xl font-bold text-white mb-4">How to Perform</h2>
-            <ol className="space-y-3">
-              {exercise.instructions.map((instruction, index) => (
-                <li key={index} className="flex items-start">
-                  <span className="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5">
-                    {index + 1}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Left Column - Instructions and Mistakes */}
+          <div className="lg:col-span-2 space-y-8">
+            {/* Demo Video Section */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="bg-gray-800 rounded-xl p-6"
+            >
+              <h2 className="text-2xl font-bold text-white mb-4 flex items-center">
+                <Play className="mr-3 text-blue-400" size={24} />
+                Demo Video
+              </h2>
+              <div className="bg-gray-700 rounded-lg p-8 text-center">
+                <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Play className="text-white" size={32} />
+                </div>
+                <p className="text-gray-400">Video tutorial coming soon!</p>
+                <p className="text-sm text-gray-500 mt-2">Watch proper form and technique</p>
+              </div>
+            </motion.div>
+
+            {/* Instructions */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="bg-gray-800 rounded-xl p-6"
+            >
+              <h2 className="text-2xl font-bold text-white mb-4">How to Perform</h2>
+              <ol className="space-y-3">
+                {exercise.instructions.map((instruction, index) => (
+                  <li key={index} className="flex items-start">
+                    <span className="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5">
+                      {index + 1}
+                    </span>
+                    <span className="text-gray-300">{instruction}</span>
+                  </li>
+                ))}
+              </ol>
+            </motion.div>
+
+            {/* Common Mistakes */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="bg-gray-800 rounded-xl p-6"
+            >
+              <h2 className="text-2xl font-bold text-white mb-4">Common Mistakes</h2>
+              <ul className="space-y-3">
+                {exercise.common_mistakes.map((mistake, index) => (
+                  <li key={index} className="flex items-start">
+                    <X className="text-red-500 mr-3 mt-0.5" size={20} />
+                    <span className="text-gray-300">{mistake}</span>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          </div>
+
+          {/* Right Column - Progress Tracking */}
+          <div className="space-y-8">
+            {/* Progression Status */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="bg-gray-800 rounded-xl p-6"
+            >
+              <h3 className="text-xl font-bold text-white mb-4">Progression Status</h3>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-400">Current Level</span>
+                  <span className={`font-semibold ${
+                    exercise.skill_level === 'Beginner' ? 'text-green-400' :
+                    exercise.skill_level === 'Intermediate' ? 'text-blue-400' :
+                    exercise.skill_level === 'Advanced' ? 'text-yellow-400' : 'text-purple-400'
+                  }`}>
+                    {exercise.skill_level}
                   </span>
-                  <span className="text-gray-300">{instruction}</span>
-                </li>
-              ))}
-            </ol>
-          </motion.div>
-
-          {/* Common Mistakes */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="bg-gray-800 rounded-xl p-6"
-          >
-            <h2 className="text-2xl font-bold text-white mb-4">Common Mistakes</h2>
-            <ul className="space-y-3">
-              {exercise.common_mistakes.map((mistake, index) => (
-                <li key={index} className="flex items-start">
-                  <X className="text-red-500 mr-3 mt-0.5" size={20} />
-                  <span className="text-gray-300">{mistake}</span>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-        </div>
-
-        {/* Progress Tracking */}
-        {user && (
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mt-8 bg-gray-800 rounded-xl p-6"
-          >
-            <h2 className="text-2xl font-bold text-white mb-6">Track Your Progress</h2>
-            
-            {progress.length > 0 && (
-              <div className="mb-8">
-                <h3 className="text-xl font-semibold text-white mb-4">Progress Chart</h3>
-                <div className="bg-gray-700 p-4 rounded-lg">
-                  <Line data={chartData} options={{ responsive: true, scales: { y: { beginAtZero: true } } }} />
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-400">Progression #</span>
+                  <span className="text-white font-semibold">{exercise.progression_order}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-400">Times Logged</span>
+                  <span className="text-white font-semibold">{progress.length}</span>
                 </div>
               </div>
+            </motion.div>
+
+            {/* Progress Chart */}
+            {user && progress.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="bg-gray-800 rounded-xl p-6"
+              >
+                <h3 className="text-xl font-bold text-white mb-4">Progress Chart</h3>
+                <div className="bg-gray-700 p-4 rounded-lg">
+                  <Line data={chartData} options={{ 
+                    responsive: true, 
+                    scales: { 
+                      y: { beginAtZero: true, grid: { color: '#374151' } },
+                      x: { grid: { color: '#374151' } }
+                    },
+                    plugins: {
+                      legend: { labels: { color: '#d1d5db' } }
+                    }
+                  }} />
+                </div>
+              </motion.div>
             )}
-            
-            <form onSubmit={logProgress} className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label className="text-gray-300">Reps</label>
-                <input
-                  type="number"
-                  value={logData.reps}
-                  onChange={(e) => setLogData({ ...logData, reps: e.target.value })}
-                  className="w-full mt-2 p-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none"
-                />
-              </div>
-              
-              <div>
-                <label className="text-gray-300">Sets</label>
-                <input
-                  type="number"
-                  value={logData.sets}
-                  onChange={(e) => setLogData({ ...logData, sets: e.target.value })}
-                  className="w-full mt-2 p-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none"
-                />
-              </div>
-              
-              <div>
-                <label className="text-gray-300">Notes</label>
-                <input
-                  type="text"
-                  value={logData.notes}
-                  onChange={(e) => setLogData({ ...logData, notes: e.target.value })}
-                  className="w-full mt-2 p-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none"
-                  placeholder="How did it feel?"
-                />
-              </div>
-              
-              <div className="md:col-span-3">
-                <button
-                  type="submit"
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
-                >
-                  Log Progress
-                </button>
-              </div>
-            </form>
-          </motion.div>
-        )}
+
+            {/* Log Progress */}
+            {user && (
+              <motion.div
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="bg-gray-800 rounded-xl p-6"
+              >
+                <h3 className="text-xl font-bold text-white mb-4">Log Progress</h3>
+                <form onSubmit={logProgress} className="space-y-4">
+                  <div>
+                    <label className="text-gray-300">Reps</label>
+                    <input
+                      type="number"
+                      value={logData.reps}
+                      onChange={(e) => setLogData({ ...logData, reps: e.target.value })}
+                      className="w-full mt-2 p-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="text-gray-300">Sets</label>
+                    <input
+                      type="number"
+                      value={logData.sets}
+                      onChange={(e) => setLogData({ ...logData, sets: e.target.value })}
+                      className="w-full mt-2 p-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="text-gray-300">Notes</label>
+                    <textarea
+                      value={logData.notes}
+                      onChange={(e) => setLogData({ ...logData, notes: e.target.value })}
+                      className="w-full mt-2 p-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none"
+                      rows={3}
+                      placeholder="How did it feel?"
+                    />
+                  </div>
+                  
+                  <button
+                    type="submit"
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition-colors flex items-center justify-center"
+                  >
+                    <TrendingUp className="mr-2" size={20} />
+                    Log Progress
+                  </button>
+                </form>
+              </motion.div>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
