@@ -273,9 +273,13 @@ async def initialize_exercises():
         {"name": "Bodyweight Squat", "pillar": "Legs", "skill_level": "Beginner", "description": "Basic unassisted squat movement.", "instructions": ["Feet shoulder width", "Lower until thighs parallel", "Stand back up"], "common_mistakes": ["Forward lean", "Shallow depth"], "progression_order": 2},
         {"name": "Split Squat", "pillar": "Legs", "skill_level": "Beginner", "description": "Single leg squat variation.", "instructions": ["One foot forward", "Lower rear knee", "Push back up"], "common_mistakes": ["Forward lean", "Not dropping knee"], "progression_order": 3},
         
-        # Legs - Intermediate
-        {"name": "Pistol Squat", "pillar": "Legs", "skill_level": "Intermediate", "description": "Single leg squat to full depth.", "instructions": ["Stand on one leg", "Lower while extending other", "Stand back up"], "common_mistakes": ["Using momentum", "Not full depth"], "progression_order": 4},
-        {"name": "Shrimp Squat", "pillar": "Legs", "skill_level": "Intermediate", "description": "Advanced single leg squat variation.", "instructions": ["Stand on one leg", "Grab rear foot", "Lower into squat"], "common_mistakes": ["Losing balance", "Not maintaining grab"], "progression_order": 5},
+        # Legs - Advanced
+        {"name": "Shrimp Squat", "pillar": "Legs", "skill_level": "Advanced", "description": "Advanced single leg squat with rear foot hold.", "instructions": ["Stand on one leg", "Grab rear foot behind", "Lower into deep squat"], "common_mistakes": ["Losing balance", "Not maintaining rear foot grip", "Insufficient flexibility"], "progression_order": 6},
+        {"name": "Matrix Squat", "pillar": "Legs", "skill_level": "Advanced", "description": "Deep squat transitioning to matrix position.", "instructions": ["Deep squat position", "Lean back dramatically", "Touch ground with hands"], "common_mistakes": ["Poor ankle mobility", "Losing balance", "Not going deep enough"], "progression_order": 7},
+        
+        # Legs - Elite
+        {"name": "Jump Squat to Pistol", "pillar": "Legs", "skill_level": "Elite", "description": "Explosive jump followed by pistol squat.", "instructions": ["Jump from deep squat", "Land in pistol position", "Control the descent"], "common_mistakes": ["Poor landing control", "Losing balance", "Insufficient power"], "progression_order": 8},
+        {"name": "Weighted Pistol Squat", "pillar": "Legs", "skill_level": "Elite", "description": "Pistol squat with additional weight.", "instructions": ["Hold weight while performing pistol", "Maintain perfect form", "Full range of motion"], "common_mistakes": ["Too much weight too soon", "Compromising form", "Poor balance"], "progression_order": 9},
     ]
     
     for exercise_data in exercises_data:
