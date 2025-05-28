@@ -298,3 +298,5 @@ test_plan:
 agent_communication:
   - agent: "main"
     message: "Completed full implementation of Dominion fitness platform. All major features implemented including authentication, exercise database with 6 pillars and 25+ exercises, progress tracking with charts, skill-based progressions, community features, shop, and beautiful Hydra.so-inspired UI. Ready for comprehensive backend testing."
+  - agent: "testing"
+    message: "Completed comprehensive backend testing. Fixed issues with the pillars endpoint and added missing 'Horizontal Push' pillar. Also fixed issues with the progress tracking and workout management endpoints that required user_id in the request body. All backend endpoints are now working correctly. Created a comprehensive test script in backend_test.py that can be used for regression testing."
