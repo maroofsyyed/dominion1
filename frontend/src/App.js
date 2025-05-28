@@ -1848,6 +1848,7 @@ function App() {
           <main>
             <AppRouter />
           </main>
+          <Footer />
           <Toaster 
             position="top-right"
             toastOptions={{
