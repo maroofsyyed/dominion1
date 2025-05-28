@@ -356,18 +356,17 @@ async def get_exercises(pillar: Optional[str] = None, skill_level: Optional[str]
     exercises = await db.exercises.find(query).sort("progression_order", 1).to_list(1000)
     return [Exercise(**exercise) for exercise in exercises]
 
+@api_router.get("/exercises/pillars")
+async def get_pillars():
+    pillars = await db.exercises.distinct("pillar")
+    return {"pillars": pillars}
+
 @api_router.get("/exercises/{exercise_id}")
 async def get_exercise(exercise_id: str):
     exercise = await db.exercises.find_one({"id": exercise_id})
     if not exercise:
         raise HTTPException(status_code=404, detail="Exercise not found")
     return Exercise(**exercise)
-
-@api_router.get("/exercises/pillars")
-async def get_pillars():
-    # Make sure we're not using the same path as get_exercise
-    pillars = await db.exercises.distinct("pillar")
-    return {"pillars": pillars}
 
 # ========== MOBILITY ROUTES ==========
 
