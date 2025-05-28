@@ -1297,6 +1297,9 @@ async def startup_event():
     await initialize_exercises()
     await initialize_mobility_exercises()
     await initialize_products()
+    await initialize_achievements()
+    await initialize_challenges()
+    await initialize_chat_channels()
 
 # Include the router in the main app
 app.include_router(api_router)
