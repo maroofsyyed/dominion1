@@ -365,6 +365,7 @@ async def get_exercise(exercise_id: str):
 
 @api_router.get("/exercises/pillars")
 async def get_pillars():
+    # Make sure we're not using the same path as get_exercise
     pillars = await db.exercises.distinct("pillar")
     return {"pillars": pillars}
 
