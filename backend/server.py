@@ -74,8 +74,16 @@ class User(BaseModel):
     city: Optional[str] = None
     profile_photo: Optional[str] = None
     goals: List[str] = []
+    interests: List[str] = []
+    fitness_level: str = "Beginner"
     points: int = 0
     badges: List[str] = []
+    achievements: List[Dict[str, Any]] = []
+    streak_count: int = 0
+    last_activity: datetime = Field(default_factory=datetime.utcnow)
+    following: List[str] = []
+    followers: List[str] = []
+    privacy_settings: Dict[str, bool] = Field(default={"profile_public": True, "progress_public": True})
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
