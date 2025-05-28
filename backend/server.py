@@ -287,23 +287,270 @@ async def initialize_exercises():
         await db.exercises.insert_one(exercise.dict())
 
 async def initialize_mobility_exercises():
-    """Initialize mobility exercises"""
+    """Initialize comprehensive mobility system with assessments and routines"""
     
     existing_mobility = await db.mobility_exercises.count_documents({})
     if existing_mobility > 0:
         return
     
-    mobility_data = [
-        {"name": "Jefferson Curl", "area": "Spine", "description": "Slow spinal flexion exercise for back health", "instructions": ["Start standing tall", "Slowly curl spine vertebra by vertebra", "Return to start with control"], "benefits": ["Spinal mobility", "Posterior chain flexibility", "Back strength"], "hold_time": "30-60 seconds"},
-        {"name": "Pancake Stretch", "area": "Hips", "description": "Forward fold stretch for hip flexibility", "instructions": ["Sit with legs wide", "Fold forward from hips", "Keep spine long"], "benefits": ["Hip flexibility", "Hamstring stretch", "Spinal mobility"], "hold_time": "1-2 minutes"},
-        {"name": "Shoulder Dislocates", "area": "Shoulders", "description": "Shoulder mobility with resistance band", "instructions": ["Hold band wide", "Bring overhead and behind", "Return to front"], "benefits": ["Shoulder mobility", "Posture improvement", "Upper body flexibility"], "hold_time": "10-15 reps"},
-        {"name": "Couch Stretch", "area": "Hip Flexors", "description": "Deep hip flexor stretch", "instructions": ["Rear foot elevated", "Lunge position", "Drive hips forward"], "benefits": ["Hip flexor length", "Posture improvement", "Lower back relief"], "hold_time": "1-2 minutes per side"},
-        {"name": "Thoracic Extension", "area": "Thoracic Spine", "description": "Upper back extension exercise", "instructions": ["Foam roller at mid-back", "Hands behind head", "Extend over roller"], "benefits": ["Upper back mobility", "Posture improvement", "Breathing enhancement"], "hold_time": "30 seconds"},
+    # Mobility Assessments
+    assessments_data = [
+        {
+            "id": str(uuid.uuid4()),
+            "name": "Overhead Squat Assessment",
+            "area": "Full Body",
+            "type": "assessment",
+            "description": "Comprehensive movement screen to evaluate whole-body mobility and stability",
+            "instructions": [
+                "Stand with feet shoulder-width apart",
+                "Raise arms overhead with thumbs pointing back",
+                "Squat down as deep as possible while keeping arms overhead",
+                "Hold for 3 seconds and observe any compensations"
+            ],
+            "benefits": ["Identifies mobility restrictions", "Evaluates movement patterns", "Guides exercise selection"],
+            "what_to_look_for": [
+                "Arms falling forward - thoracic/shoulder mobility",
+                "Knees caving in - hip/ankle mobility",
+                "Heels lifting - ankle dorsiflexion restriction",
+                "Forward lean - hip flexor tightness"
+            ],
+            "scoring": {
+                "3": "Perfect squat with arms overhead",
+                "2": "Minor compensation in one area",
+                "1": "Multiple compensations present",
+                "0": "Unable to perform movement"
+            },
+            "hold_time": "3 seconds",
+            "created_at": datetime.utcnow()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "name": "Shoulder Reach Test",
+            "area": "Shoulders",
+            "type": "assessment",
+            "description": "Assess shoulder flexibility and internal/external rotation",
+            "instructions": [
+                "Reach one arm overhead and down your back",
+                "Reach other arm behind back and up",
+                "Try to touch fingers behind your back",
+                "Measure gap between fingertips"
+            ],
+            "benefits": ["Evaluates shoulder mobility", "Identifies rotation restrictions", "Tracks improvement"],
+            "what_to_look_for": [
+                "Gap between fingers indicates tightness",
+                "Compare both sides for asymmetry",
+                "Note any pain or discomfort"
+            ],
+            "scoring": {
+                "3": "Fingers overlap behind back",
+                "2": "Fingertips touch",
+                "1": "Gap less than 2 inches",
+                "0": "Gap greater than 2 inches"
+            },
+            "hold_time": "5 seconds",
+            "created_at": datetime.utcnow()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "name": "Ankle Dorsiflexion Test",
+            "area": "Ankles",
+            "type": "assessment",
+            "description": "Evaluate ankle mobility for proper squat depth and balance",
+            "instructions": [
+                "Stand facing a wall in lunge position",
+                "Place front foot 4 inches from wall",
+                "Keep heel down and knee straight",
+                "Try to touch knee to wall without lifting heel"
+            ],
+            "benefits": ["Tests ankle flexibility", "Predicts squat performance", "Identifies restrictions"],
+            "what_to_look_for": [
+                "Heel lifting off ground",
+                "Knee unable to reach wall",
+                "Arch collapsing inward"
+            ],
+            "scoring": {
+                "3": "Knee easily touches wall",
+                "2": "Knee barely touches wall",
+                "1": "Knee 1 inch from wall",
+                "0": "Knee more than 1 inch from wall"
+            },
+            "hold_time": "3 seconds",
+            "created_at": datetime.utcnow()
+        }
     ]
     
-    for mobility_data in mobility_data:
-        mobility = MobilityExercise(**mobility_data)
-        await db.mobility_exercises.insert_one(mobility.dict())
+    # Dynamic Mobility Routines
+    routines_data = [
+        {
+            "id": str(uuid.uuid4()),
+            "name": "Morning Mobility Flow",
+            "area": "Full Body",
+            "type": "routine",
+            "description": "Energizing 10-minute routine to start your day with improved mobility",
+            "duration": "10 minutes",
+            "difficulty": "Beginner",
+            "exercises": [
+                "Cat-Cow Stretch", "World's Greatest Stretch", "Leg Swings", 
+                "Arm Circles", "Hip Circles", "Spinal Waves"
+            ],
+            "instructions": ["Perform each exercise for 30-60 seconds", "Move slowly and controlled", "Focus on breath"],
+            "benefits": ["Increases circulation", "Prepares body for activity", "Reduces stiffness"],
+            "best_time": "Morning or pre-workout",
+            "created_at": datetime.utcnow()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "name": "Desk Worker Relief",
+            "area": "Neck, Shoulders, Hips",
+            "type": "routine",
+            "description": "Combat the effects of prolonged sitting with targeted stretches",
+            "duration": "8 minutes",
+            "difficulty": "Beginner",
+            "exercises": [
+                "Neck Rolls", "Shoulder Blade Squeezes", "Hip Flexor Stretch",
+                "Thoracic Extension", "Seated Spinal Twist"
+            ],
+            "instructions": ["Can be done at desk or standing", "Hold stretches for 30 seconds", "Repeat 2-3 times daily"],
+            "benefits": ["Reduces neck tension", "Opens tight hips", "Improves posture"],
+            "best_time": "During work breaks",
+            "created_at": datetime.utcnow()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "name": "Pre-Workout Dynamic Warmup",
+            "area": "Full Body",
+            "type": "routine",
+            "description": "Dynamic movements to prepare your body for intense training",
+            "duration": "12 minutes",
+            "difficulty": "Intermediate",
+            "exercises": [
+                "Walking High Knees", "Butt Kicks", "Leg Swings", "Arm Swings",
+                "Walking Lunges", "Inchworms", "Dynamic Pigeon"
+            ],
+            "instructions": ["Keep movements controlled", "Gradually increase range of motion", "Focus on activation"],
+            "benefits": ["Increases body temperature", "Activates muscles", "Prevents injury"],
+            "best_time": "Before workouts",
+            "created_at": datetime.utcnow()
+        }
+    ]
+    
+    # Enhanced Individual Mobility Exercises
+    exercises_data = [
+        {
+            "id": str(uuid.uuid4()),
+            "name": "World's Greatest Stretch",
+            "area": "Hips, Ankles, Thoracic",
+            "type": "exercise",
+            "description": "The most comprehensive single stretch for lower body mobility",
+            "instructions": [
+                "Start in lunge position with hands on ground",
+                "Drop back knee to ground",
+                "Place inside elbow to front ankle",
+                "Rotate opposite arm toward ceiling",
+                "Hold and breathe deeply"
+            ],
+            "benefits": ["Opens hip flexors", "Stretches IT band", "Improves thoracic rotation", "Enhances ankle mobility"],
+            "targets": ["Hip flexors", "IT band", "Thoracic spine", "Ankle dorsiflexion"],
+            "common_mistakes": ["Dropping into stretch too quickly", "Not maintaining front knee alignment", "Holding breath"],
+            "progressions": [
+                "Beginner: Hold static position",
+                "Intermediate: Add gentle rocking",
+                "Advanced: Add posterior reach"
+            ],
+            "contraindications": ["Recent hip surgery", "Acute lower back pain"],
+            "hold_time": "30-60 seconds each side",
+            "video_url": "placeholder_for_worlds_greatest_stretch",
+            "created_at": datetime.utcnow()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "name": "Thoracic Spine Cat-Cow",
+            "area": "Thoracic Spine",
+            "type": "exercise",
+            "description": "Improve upper back mobility and posture with controlled spinal movement",
+            "instructions": [
+                "Start on hands and knees",
+                "Arch your back and look up (cow)",
+                "Round your spine and tuck chin (cat)",
+                "Move slowly between positions",
+                "Focus on mid-back movement"
+            ],
+            "benefits": ["Increases spinal mobility", "Reduces upper back tension", "Improves posture", "Relieves stiffness"],
+            "targets": ["Thoracic vertebrae", "Spinal erectors", "Deep core muscles"],
+            "common_mistakes": ["Moving too fast", "Using only lower back", "Not breathing with movement"],
+            "progressions": [
+                "Beginner: Gentle range of motion",
+                "Intermediate: Hold end positions",
+                "Advanced: Add side bending"
+            ],
+            "contraindications": ["Acute spinal injury", "Recent back surgery"],
+            "hold_time": "10-15 slow repetitions",
+            "video_url": "placeholder_for_cat_cow",
+            "created_at": datetime.utcnow()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "name": "90/90 Hip Stretch",
+            "area": "Hips",
+            "type": "exercise", 
+            "description": "Target both internal and external hip rotation simultaneously",
+            "instructions": [
+                "Sit with both legs bent at 90 degrees",
+                "Front leg in external rotation",
+                "Back leg in internal rotation",
+                "Lean forward over front leg",
+                "Switch sides after hold"
+            ],
+            "benefits": ["Improves hip internal rotation", "Increases external rotation", "Balances hip mobility", "Reduces hip tightness"],
+            "targets": ["Hip internal rotators", "Hip external rotators", "Hip capsule"],
+            "common_mistakes": ["Sitting on one hip", "Forcing the stretch", "Not maintaining spine alignment"],
+            "progressions": [
+                "Beginner: Sit upright",
+                "Intermediate: Gentle forward lean", 
+                "Advanced: Deep forward fold"
+            ],
+            "contraindications": ["Hip replacement", "Acute hip pain"],
+            "hold_time": "45-90 seconds each side",
+            "video_url": "placeholder_for_90_90_hip",
+            "created_at": datetime.utcnow()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "name": "Ankle ABC's",
+            "area": "Ankles",
+            "type": "exercise",
+            "description": "Improve ankle mobility in all directions through alphabet tracing",
+            "instructions": [
+                "Sit or lie down comfortably",
+                "Lift one foot off ground",
+                "Trace the alphabet with your big toe",
+                "Make large, controlled movements",
+                "Complete full alphabet each foot"
+            ],
+            "benefits": ["Increases ankle range of motion", "Improves circulation", "Strengthens small muscles", "Prevents stiffness"],
+            "targets": ["Ankle dorsiflexors", "Ankle plantarflexors", "Ankle invertors", "Ankle evertors"],
+            "common_mistakes": ["Moving too quickly", "Making letters too small", "Using whole leg instead of ankle"],
+            "progressions": [
+                "Beginner: Capital letters only",
+                "Intermediate: Upper and lowercase",
+                "Advanced: Cursive or backwards"
+            ],
+            "contraindications": ["Recent ankle injury", "Acute ankle sprain"],
+            "hold_time": "2-3 minutes each foot",
+            "video_url": "placeholder_for_ankle_abcs",
+            "created_at": datetime.utcnow()
+        }
+    ]
+    
+    # Insert all data
+    for assessment in assessments_data:
+        await db.mobility_exercises.insert_one(assessment)
+    
+    for routine in routines_data:
+        await db.mobility_exercises.insert_one(routine)
+        
+    for exercise in exercises_data:
+        await db.mobility_exercises.insert_one(exercise)
 
 async def initialize_products():
     """Initialize shop products"""
