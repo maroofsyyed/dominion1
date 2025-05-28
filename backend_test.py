@@ -273,12 +273,13 @@ def test_get_leaderboard():
     return leaderboard
 
 # 7. Test Workout Management
-def test_create_workout(token, exercises):
+def test_create_workout(token, exercises, user_data):
     if not exercises or len(exercises) < 2:
         return None
     
     workout_data = {
         "name": "Test Workout",
+        "user_id": user_data["id"],
         "exercises": [
             {
                 "exercise_id": exercises[0]["id"],
