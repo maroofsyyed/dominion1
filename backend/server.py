@@ -234,9 +234,13 @@ async def initialize_exercises():
         {"name": "Incline Row", "pillar": "Vertical Pull", "skill_level": "Beginner", "description": "Angled rowing for progression to horizontal row.", "instructions": ["Bar at waist height", "Body at 45-degree angle", "Pull with control"], "common_mistakes": ["Sagging hips", "Not squeezing shoulder blades"], "progression_order": 2},
         {"name": "Pull Up", "pillar": "Vertical Pull", "skill_level": "Beginner", "description": "Classic vertical pulling exercise.", "instructions": ["Dead hang from bar", "Pull until chin over bar", "Lower with control"], "common_mistakes": ["Kipping unnecessarily", "Not full range of motion"], "progression_order": 3},
         
-        # Vertical Pull - Intermediate
-        {"name": "L-Sit Pull Up", "pillar": "Vertical Pull", "skill_level": "Intermediate", "description": "Pull up while holding L-sit position.", "instructions": ["Hold L-sit position", "Perform pull up", "Keep legs horizontal"], "common_mistakes": ["Dropping legs during pull", "Not maintaining L-sit"], "progression_order": 4},
-        {"name": "Muscle Up", "pillar": "Vertical Pull", "skill_level": "Intermediate", "description": "Transition from pull up to dip position.", "instructions": ["Start with pull up", "Transition over bar", "Press to support"], "common_mistakes": ["Using too much kip", "Not getting high enough"], "progression_order": 5},
+        # Vertical Pull - Advanced
+        {"name": "Wide Grip Pull Up", "pillar": "Vertical Pull", "skill_level": "Advanced", "description": "Pull up with hands wider than shoulders.", "instructions": ["Hands 1.5x shoulder width", "Pull chest to bar", "Focus on lat engagement"], "common_mistakes": ["Not going full range", "Using momentum", "Insufficient lat activation"], "progression_order": 6},
+        {"name": "Archer Pull Up", "pillar": "Vertical Pull", "skill_level": "Advanced", "description": "Unilateral pull up variation.", "instructions": ["Pull to one side", "Straighten opposite arm", "Alternate sides"], "common_mistakes": ["Not shifting weight enough", "Using both arms equally", "Poor control"], "progression_order": 7},
+        
+        # Vertical Pull - Elite
+        {"name": "One Arm Pull Up", "pillar": "Vertical Pull", "skill_level": "Elite", "description": "Ultimate pulling exercise using single arm.", "instructions": ["Hang from one arm", "Pull chin over bar", "Lower with control"], "common_mistakes": ["Insufficient strength base", "Body swinging", "Not full range"], "progression_order": 8},
+        {"name": "Weighted Pull Up", "pillar": "Vertical Pull", "skill_level": "Elite", "description": "Pull up with additional weight.", "instructions": ["Add weight to body", "Maintain perfect form", "Full range of motion"], "common_mistakes": ["Too much weight too soon", "Compromising form", "Incomplete range"], "progression_order": 9},
         
         # Vertical Push - Beginner
         {"name": "Push Up", "pillar": "Vertical Push", "skill_level": "Beginner", "description": "Basic pushing exercise for chest and arms.", "instructions": ["Plank position", "Lower chest to ground", "Push back up"], "common_mistakes": ["Sagging hips", "Not full range of motion"], "progression_order": 1},
