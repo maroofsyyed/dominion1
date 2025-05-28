@@ -488,8 +488,11 @@ async def get_community_messages(community_id: str):
 
 @api_router.get("/leaderboard")
 async def get_leaderboard():
+    # Get real users first
     users = await db.users.find().sort("points", -1).limit(10).to_list(10)
     leaderboard = []
+    
+    # Add real users to leaderboard
     for i, user in enumerate(users):
         leaderboard.append({
             "rank": i + 1,
@@ -498,6 +501,40 @@ async def get_leaderboard():
             "university": user.get("university", ""),
             "city": user.get("city", "")
         })
+    
+    # Fill remaining spots with sample Indian users if needed
+    sample_users = [
+        {"username": "arjun_warrior", "points": 2850, "university": "IIT Delhi", "city": "New Delhi"},
+        {"username": "priya_fitness", "points": 2720, "university": "IIT Bombay", "city": "Mumbai"},
+        {"username": "raj_calisthenics", "points": 2645, "university": "IIT Madras", "city": "Chennai"},
+        {"username": "kavya_strength", "points": 2580, "university": "IIT Kanpur", "city": "Kanpur"},
+        {"username": "rohit_beast", "points": 2495, "university": "IIT Kharagpur", "city": "Kharagpur"},
+        {"username": "sneha_moves", "points": 2420, "university": "BITS Pilani", "city": "Pilani"},
+        {"username": "vikram_elite", "points": 2350, "university": "IIT Roorkee", "city": "Roorkee"},
+        {"username": "ananya_power", "points": 2275, "university": "Delhi University", "city": "Delhi"},
+        {"username": "karan_muscle", "points": 2190, "university": "NIT Trichy", "city": "Tiruchirappalli"},
+        {"username": "riya_champion", "points": 2105, "university": "Pune University", "city": "Pune"},
+        {"username": "aarav_legend", "points": 2020, "university": "IIT Guwahati", "city": "Guwahati"},
+        {"username": "isha_ninja", "points": 1945, "university": "Jadavpur University", "city": "Kolkata"},
+        {"username": "dev_titan", "points": 1870, "university": "IIIT Hyderabad", "city": "Hyderabad"},
+        {"username": "pooja_strong", "points": 1795, "university": "Manipal University", "city": "Manipal"},
+        {"username": "harsh_alpha", "points": 1720, "university": "VIT Vellore", "city": "Vellore"}
+    ]
+    
+    # Add sample users to fill the leaderboard
+    current_rank = len(leaderboard) + 1
+    for sample in sample_users:
+        if len(leaderboard) >= 15:  # Limit to top 15
+            break
+        leaderboard.append({
+            "rank": current_rank,
+            "username": sample["username"],
+            "points": sample["points"],
+            "university": sample["university"],
+            "city": sample["city"]
+        })
+        current_rank += 1
+    
     return leaderboard
 
 # ========== WEBSOCKET ==========
