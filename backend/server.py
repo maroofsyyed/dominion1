@@ -260,9 +260,13 @@ async def initialize_exercises():
         {"name": "Foot Supported L-Sit", "pillar": "Core", "skill_level": "Beginner", "description": "L-sit with foot support for progression.", "instructions": ["Sit with legs extended", "Support weight on hands", "Lift hips slightly"], "common_mistakes": ["Not engaging arms", "Leaning back"], "progression_order": 2},
         {"name": "Tuck L-Sit", "pillar": "Core", "skill_level": "Beginner", "description": "L-sit with knees tucked to chest.", "instructions": ["Support on hands", "Tuck knees to chest", "Hold position"], "common_mistakes": ["Not lifting hips", "Rounding shoulders"], "progression_order": 3},
         
-        # Core - Intermediate
-        {"name": "L-Sit", "pillar": "Core", "skill_level": "Intermediate", "description": "Full L-sit with straight legs.", "instructions": ["Support on hands", "Lift legs to horizontal", "Keep legs straight"], "common_mistakes": ["Piking at hips", "Not pressing down"], "progression_order": 4},
-        {"name": "V-Sit", "pillar": "Core", "skill_level": "Intermediate", "description": "Advanced core hold with legs elevated.", "instructions": ["Sit with hands by hips", "Lift legs high", "Balance on hands"], "common_mistakes": ["Not keeping legs together", "Rounding back"], "progression_order": 5},
+        # Core - Advanced
+        {"name": "Human Flag", "pillar": "Core", "skill_level": "Advanced", "description": "Horizontal body hold using vertical pole.", "instructions": ["Grip vertical pole", "Lift body horizontal", "Hold flag position"], "common_mistakes": ["Not engaging enough", "Poor grip position", "Insufficient strength"], "progression_order": 6},
+        {"name": "Dragon Flag", "pillar": "Core", "skill_level": "Advanced", "description": "Full body lever on bench or bar.", "instructions": ["Lie on bench", "Grip behind head", "Lift entire body straight"], "common_mistakes": ["Piking at hips", "Not keeping rigid", "Poor control"], "progression_order": 7},
+        
+        # Core - Elite
+        {"name": "Front Lever", "pillar": "Core", "skill_level": "Elite", "description": "Horizontal body hold facing down.", "instructions": ["Dead hang position", "Lift body horizontal", "Keep perfectly straight"], "common_mistakes": ["Sagging hips", "Bent knees", "Insufficient lat strength"], "progression_order": 8},
+        {"name": "Back Lever", "pillar": "Core", "skill_level": "Elite", "description": "Horizontal body hold facing up.", "instructions": ["Start in support", "Lower to horizontal", "Keep body straight"], "common_mistakes": ["Poor shoulder mobility", "Bent body", "Rushed progression"], "progression_order": 9},
         
         # Legs - Beginner
         {"name": "Assisted Squat", "pillar": "Legs", "skill_level": "Beginner", "description": "Squat with assistance for learning movement.", "instructions": ["Hold onto support", "Lower into squat", "Stand back up"], "common_mistakes": ["Knees caving in", "Not going deep enough"], "progression_order": 1},
