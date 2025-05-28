@@ -1695,7 +1695,105 @@ const ContactPage = () => {
   );
 };
 
-// Protected Route Component
+// Footer Component
+const Footer = () => {
+  return (
+    <footer className="bg-black border-t border-gray-800">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          {/* Brand Section */}
+          <div className="col-span-1 md:col-span-2">
+            <Link to="/" className="text-3xl font-bold text-white mb-4 block">
+              <span className="bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
+                Dominion
+              </span>
+            </Link>
+            <p className="text-gray-400 mb-6 max-w-md">
+              Master your bodyweight fitness journey with our comprehensive progression system. 
+              From beginner to elite - we'll guide you every step of the way.
+            </p>
+            <div className="flex space-x-4">
+              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                <Heart size={24} />
+              </a>
+              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                <Users size={24} />
+              </a>
+              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                <MessageCircle size={24} />
+              </a>
+            </div>
+          </div>
+
+          {/* Quick Links */}
+          <div>
+            <h3 className="text-white font-bold mb-4">Quick Links</h3>
+            <ul className="space-y-3">
+              <li><Link to="/exercises" className="text-gray-400 hover:text-white transition-colors">Exercises</Link></li>
+              <li><Link to="/progression" className="text-gray-400 hover:text-white transition-colors">Progression</Link></li>
+              <li><Link to="/community" className="text-gray-400 hover:text-white transition-colors">Community</Link></li>
+              <li><Link to="/shop" className="text-gray-400 hover:text-white transition-colors">Shop</Link></li>
+            </ul>
+          </div>
+
+          {/* Support */}
+          <div>
+            <h3 className="text-white font-bold mb-4">Support</h3>
+            <ul className="space-y-3">
+              <li><Link to="/contact" className="text-gray-400 hover:text-white transition-colors">Contact Us</Link></li>
+              <li><a href="mailto:maroof@dominionvault.com" className="text-gray-400 hover:text-white transition-colors">Email Support</a></li>
+              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">FAQ</a></li>
+              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Help Center</a></li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Movement Pillars */}
+        <div className="mt-12 pt-8 border-t border-gray-800">
+          <h3 className="text-white font-bold mb-6 text-center">Movement Pillars</h3>
+          <div className="grid grid-cols-2 md:grid-cols-6 gap-4 text-center">
+            <div className="bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition-colors">
+              <div className="text-green-400 font-semibold text-sm">Horizontal Pull</div>
+              <div className="text-gray-400 text-xs mt-1">Pull-ups, Rows</div>
+            </div>
+            <div className="bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition-colors">
+              <div className="text-blue-400 font-semibold text-sm">Vertical Pull</div>
+              <div className="text-gray-400 text-xs mt-1">Muscle-ups, Levers</div>
+            </div>
+            <div className="bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition-colors">
+              <div className="text-yellow-400 font-semibold text-sm">Vertical Push</div>
+              <div className="text-gray-400 text-xs mt-1">Handstands, Presses</div>
+            </div>
+            <div className="bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition-colors">
+              <div className="text-purple-400 font-semibold text-sm">Horizontal Push</div>
+              <div className="text-gray-400 text-xs mt-1">Push-ups, Planche</div>
+            </div>
+            <div className="bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition-colors">
+              <div className="text-red-400 font-semibold text-sm">Core</div>
+              <div className="text-gray-400 text-xs mt-1">L-sits, Flags</div>
+            </div>
+            <div className="bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition-colors">
+              <div className="text-orange-400 font-semibold text-sm">Legs</div>
+              <div className="text-gray-400 text-xs mt-1">Squats, Pistols</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="mt-12 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
+          <div className="text-gray-400 text-sm">
+            © 2025 Dominion Fitness. All rights reserved.
+          </div>
+          <div className="flex space-x-6 mt-4 md:mt-0">
+            <a href="#" className="text-gray-400 hover:text-white text-sm transition-colors">Privacy Policy</a>
+            <a href="#" className="text-gray-400 hover:text-white text-sm transition-colors">Terms of Service</a>
+            <a href="#" className="text-gray-400 hover:text-white text-sm transition-colors">Cookie Policy</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+};
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
 
