@@ -247,9 +247,13 @@ async def initialize_exercises():
         {"name": "Pike Push Up", "pillar": "Vertical Push", "skill_level": "Beginner", "description": "Inverted push up targeting shoulders.", "instructions": ["Pike position", "Lower head towards ground", "Push back up"], "common_mistakes": ["Not keeping legs straight", "Going too low"], "progression_order": 2},
         {"name": "Wall Handstand", "pillar": "Vertical Push", "skill_level": "Beginner", "description": "Static handstand hold against wall.", "instructions": ["Kick up to wall", "Hold handstand position", "Keep body straight"], "common_mistakes": ["Arching back", "Not engaging core"], "progression_order": 3},
         
-        # Vertical Push - Intermediate
-        {"name": "Handstand Push Up", "pillar": "Vertical Push", "skill_level": "Intermediate", "description": "Push up performed in handstand position.", "instructions": ["Hold handstand", "Lower head to ground", "Push back up"], "common_mistakes": ["Not going deep enough", "Losing balance"], "progression_order": 4},
-        {"name": "Ring Dip", "pillar": "Vertical Push", "skill_level": "Intermediate", "description": "Dip performed on gymnastics rings.", "instructions": ["Support position on rings", "Lower with control", "Press back up"], "common_mistakes": ["Rings turning out", "Not going deep enough"], "progression_order": 5},
+        # Vertical Push - Advanced
+        {"name": "Freestanding Handstand", "pillar": "Vertical Push", "skill_level": "Advanced", "description": "Handstand without wall support.", "instructions": ["Kick up to handstand", "Balance without support", "Hold for time"], "common_mistakes": ["Over-balancing", "Under-balancing", "Tense shoulders"], "progression_order": 6},
+        {"name": "90 Degree Push Up", "pillar": "Vertical Push", "skill_level": "Advanced", "description": "Push up with feet elevated to 90 degrees.", "instructions": ["Feet at chest height", "Lower head to ground", "Press back up"], "common_mistakes": ["Not going deep enough", "Losing form", "Too much elevation"], "progression_order": 7},
+        
+        # Vertical Push - Elite
+        {"name": "One Arm Handstand", "pillar": "Vertical Push", "skill_level": "Elite", "description": "Ultimate balance skill on one arm.", "instructions": ["Shift weight to one arm", "Lift other arm", "Hold balance"], "common_mistakes": ["Insufficient two-arm base", "Poor weight distribution", "Rushing progression"], "progression_order": 8},
+        {"name": "Planche", "pillar": "Vertical Push", "skill_level": "Elite", "description": "Horizontal body hold supported by arms.", "instructions": ["Lean forward from plank", "Lift feet off ground", "Hold horizontal position"], "common_mistakes": ["Insufficient lean", "Not engaging properly", "Poor progression"], "progression_order": 9},
         
         # Core - Beginner
         {"name": "Plank", "pillar": "Core", "skill_level": "Beginner", "description": "Basic core strengthening hold.", "instructions": ["Forearm position", "Keep body straight", "Hold for time"], "common_mistakes": ["Sagging hips", "Holding breath"], "progression_order": 1},
