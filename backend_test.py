@@ -33,6 +33,19 @@ test_user = {
     "city": "Test City"
 }
 
+# Second test user for social features
+test_user2 = {
+    "username": f"testuser2_{uuid.uuid4().hex[:8]}",
+    "email": f"test2_{uuid.uuid4().hex[:8]}@example.com",
+    "password": "Test@123",
+    "full_name": "Test User 2",
+    "age": 28,
+    "height": 180.0,
+    "weight": 75.5,
+    "university": "Another University",
+    "city": "Another City"
+}
+
 # Store test results
 test_results = {
     "total_tests": 0,
@@ -71,6 +84,16 @@ def test_user_registration():
     assert data["user"]["username"] == test_user["username"], "Username mismatch"
     assert data["user"]["email"] == test_user["email"], "Email mismatch"
     return data["access_token"]
+
+def test_user2_registration():
+    response = requests.post(f"{API_URL}/auth/register", json=test_user2)
+    assert response.status_code == 200, f"Registration failed with status {response.status_code}: {response.text}"
+    data = response.json()
+    assert "access_token" in data, "No access token in response"
+    assert "user" in data, "No user data in response"
+    assert data["user"]["username"] == test_user2["username"], "Username mismatch"
+    assert data["user"]["email"] == test_user2["email"], "Email mismatch"
+    return data["access_token"], data["user"]
 
 def test_user_login():
     login_data = {
@@ -310,6 +333,124 @@ def test_get_user_workouts(token):
     assert isinstance(workouts, list), "Workouts is not a list"
     return workouts
 
+# 8. Test Enhanced Mobility System
+def test_create_mobility_assessment(token, user_data):
+    assessment_data = {
+        "user_id": user_data["id"],
+        "assessment_type": "overhead_squat",
+        "score": 2,
+        "notes": "Good mobility, slight forward lean",
+        "areas_of_concern": ["ankle_mobility", "thoracic_spine"]
+    }
+    
+    headers = {"Authorization": f"Bearer {token}"}
+    response = requests.post(f"{API_URL}/mobility/assessments", json=assessment_data, headers=headers)
+    assert response.status_code == 200, f"Create mobility assessment failed with status {response.status_code}: {response.text}"
+    data = response.json()
+    assert data["assessment_type"] == assessment_data["assessment_type"], "Assessment type mismatch"
+    assert data["score"] == assessment_data["score"], "Score mismatch"
+    return data
+
+def test_get_mobility_assessments(token):
+    headers = {"Authorization": f"Bearer {token}"}
+    response = requests.get(f"{API_URL}/mobility/assessments", headers=headers)
+    assert response.status_code == 200, f"Get mobility assessments failed with status {response.status_code}: {response.text}"
+    assessments = response.json()
+    assert isinstance(assessments, list), "Assessments is not a list"
+    return assessments
+
+def test_get_mobility_recommendations(token):
+    headers = {"Authorization": f"Bearer {token}"}
+    response = requests.get(f"{API_URL}/mobility/recommendations", headers=headers)
+    assert response.status_code == 200, f"Get mobility recommendations failed with status {response.status_code}: {response.text}"
+    recommendations = response.json()
+    assert isinstance(recommendations, dict), "Recommendations is not a dictionary"
+    return recommendations
+
+# 9. Test Enhanced Social Features
+def test_user_search(token):
+    headers = {"Authorization": f"Bearer {token}"}
+    response = requests.get(f"{API_URL}/users/search?q={test_user2['username'][:5]}", headers=headers)
+    assert response.status_code == 200, f"User search failed with status {response.status_code}: {response.text}"
+    users = response.json()
+    assert isinstance(users, list), "Users is not a list"
+    assert len(users) > 0, "No users found in search"
+    return users
+
+def test_follow_user(token, user2_id):
+    headers = {"Authorization": f"Bearer {token}"}
+    response = requests.post(f"{API_URL}/users/follow/{user2_id}", headers=headers)
+    assert response.status_code == 200, f"Follow user failed with status {response.status_code}: {response.text}"
+    data = response.json()
+    assert "message" in data, "No message in response"
+    return data
+
+def test_get_user_profile(token, user2_id):
+    headers = {"Authorization": f"Bearer {token}"}
+    response = requests.get(f"{API_URL}/users/{user2_id}/profile", headers=headers)
+    assert response.status_code == 200, f"Get user profile failed with status {response.status_code}: {response.text}"
+    profile = response.json()
+    assert profile["id"] == user2_id, "User ID mismatch"
+    return profile
+
+# 10. Test Challenges & Gamification
+def test_get_challenges():
+    response = requests.get(f"{API_URL}/challenges")
+    assert response.status_code == 200, f"Get challenges failed with status {response.status_code}: {response.text}"
+    challenges = response.json()
+    assert isinstance(challenges, list), "Challenges is not a list"
+    assert len(challenges) == 3, f"Expected 3 challenges, got {len(challenges)}"
+    return challenges
+
+def test_join_challenge(token, challenges):
+    if not challenges:
+        return None
+    
+    challenge_id = challenges[0]["id"]
+    headers = {"Authorization": f"Bearer {token}"}
+    response = requests.post(f"{API_URL}/challenges/{challenge_id}/join", headers=headers)
+    assert response.status_code == 200, f"Join challenge failed with status {response.status_code}: {response.text}"
+    data = response.json()
+    assert "message" in data, "No message in response"
+    return data
+
+def test_get_achievements():
+    response = requests.get(f"{API_URL}/achievements")
+    assert response.status_code == 200, f"Get achievements failed with status {response.status_code}: {response.text}"
+    achievements = response.json()
+    assert isinstance(achievements, list), "Achievements is not a list"
+    assert len(achievements) == 5, f"Expected 5 achievements, got {len(achievements)}"
+    return achievements
+
+# 11. Test Chat Channels
+def test_get_chat_channels():
+    response = requests.get(f"{API_URL}/chat/channels")
+    assert response.status_code == 200, f"Get chat channels failed with status {response.status_code}: {response.text}"
+    channels = response.json()
+    assert isinstance(channels, list), "Channels is not a list"
+    return channels
+
+def test_join_chat_channel(token, channels):
+    if not channels:
+        return None
+    
+    channel_id = channels[0]["id"]
+    headers = {"Authorization": f"Bearer {token}"}
+    response = requests.post(f"{API_URL}/chat/channels/{channel_id}/join", headers=headers)
+    assert response.status_code == 200, f"Join chat channel failed with status {response.status_code}: {response.text}"
+    data = response.json()
+    assert "message" in data, "No message in response"
+    return data
+
+# 12. Test Analytics
+def test_get_progress_analytics(token):
+    headers = {"Authorization": f"Bearer {token}"}
+    response = requests.get(f"{API_URL}/analytics/progress", headers=headers)
+    assert response.status_code == 200, f"Get progress analytics failed with status {response.status_code}: {response.text}"
+    analytics = response.json()
+    assert isinstance(analytics, dict), "Analytics is not a dictionary"
+    return analytics
+
 # Run all tests
 def run_all_tests():
     print("\n========== DOMINION FITNESS PLATFORM BACKEND TESTS ==========\n")
@@ -322,6 +463,11 @@ def run_all_tests():
     user_data = None
     if token:
         user_data = run_test("Get Current User", test_get_current_user, token)
+    
+    # Register second user for social features testing
+    token2, user2_data = None, None
+    if token:
+        token2, user2_data = run_test("Second User Registration", test_user2_registration)
     
     # 2. Exercise Database
     exercises = run_test("Get Exercises", test_get_exercises)
@@ -360,6 +506,33 @@ def run_all_tests():
     if token and exercises and user_data:
         workout = run_test("Create Workout", test_create_workout, token, exercises, user_data)
         run_test("Get User Workouts", test_get_user_workouts, token)
+    
+    # 8. Enhanced Mobility System
+    if token and user_data:
+        assessment = run_test("Create Mobility Assessment", test_create_mobility_assessment, token, user_data)
+        run_test("Get Mobility Assessments", test_get_mobility_assessments, token)
+        run_test("Get Mobility Recommendations", test_get_mobility_recommendations, token)
+    
+    # 9. Enhanced Social Features
+    if token and user2_data:
+        users = run_test("User Search", test_user_search, token)
+        run_test("Follow User", test_follow_user, token, user2_data["id"])
+        run_test("Get User Profile", test_get_user_profile, token, user2_data["id"])
+    
+    # 10. Challenges & Gamification
+    challenges = run_test("Get Challenges", test_get_challenges)
+    if token and challenges:
+        run_test("Join Challenge", test_join_challenge, token, challenges)
+    run_test("Get Achievements", test_get_achievements)
+    
+    # 11. Chat Channels
+    channels = run_test("Get Chat Channels", test_get_chat_channels)
+    if token and channels:
+        run_test("Join Chat Channel", test_join_chat_channel, token, channels)
+    
+    # 12. Analytics
+    if token:
+        run_test("Get Progress Analytics", test_get_progress_analytics, token)
     
     # Print summary
     print("\n========== TEST SUMMARY ==========")
