@@ -202,10 +202,8 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
 async def initialize_exercises():
     """Initialize the exercise database with the bodyweight fitness progression"""
     
-    # Check if exercises already exist
-    existing_exercises = await db.exercises.count_documents({})
-    if existing_exercises > 0:
-        return
+    # Force refresh of exercises
+    await db.exercises.delete_many({})
     
     exercises_data = [
         # Horizontal Pull - Beginner
