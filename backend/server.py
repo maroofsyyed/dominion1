@@ -630,6 +630,155 @@ async def initialize_products():
         product = Product(**product_data)
         await db.products.insert_one(product.dict())
 
+async def initialize_achievements():
+    """Initialize achievement system"""
+    
+    existing_achievements = await db.achievements.count_documents({})
+    if existing_achievements > 0:
+        return
+    
+    achievements_data = [
+        {
+            "name": "First Steps",
+            "description": "Complete your first workout",
+            "category": "strength",
+            "criteria": {"workouts_completed": 1},
+            "badge_icon": "🎯",
+            "points_reward": 50,
+            "rarity": "common"
+        },
+        {
+            "name": "Consistency Champion",
+            "description": "Log workouts for 7 consecutive days",
+            "category": "consistency",
+            "criteria": {"streak_days": 7},
+            "badge_icon": "🔥",
+            "points_reward": 200,
+            "rarity": "rare"
+        },
+        {
+            "name": "Mobility Master",
+            "description": "Complete 5 mobility assessments",
+            "category": "mobility",
+            "criteria": {"assessments_completed": 5},
+            "badge_icon": "🧘",
+            "points_reward": 150,
+            "rarity": "rare"
+        },
+        {
+            "name": "Social Butterfly",
+            "description": "Follow 10 other users",
+            "category": "social",
+            "criteria": {"following_count": 10},
+            "badge_icon": "🦋",
+            "points_reward": 100,
+            "rarity": "common"
+        },
+        {
+            "name": "Legendary Warrior",
+            "description": "Reach 5000 points",
+            "category": "strength",
+            "criteria": {"total_points": 5000},
+            "badge_icon": "⚡",
+            "points_reward": 500,
+            "rarity": "legendary"
+        }
+    ]
+    
+    for achievement_data in achievements_data:
+        achievement = Achievement(**achievement_data)
+        await db.achievements.insert_one(achievement.dict())
+
+async def initialize_challenges():
+    """Initialize challenges"""
+    
+    existing_challenges = await db.challenges.count_documents({})
+    if existing_challenges > 0:
+        return
+    
+    now = datetime.utcnow()
+    week_later = now + timedelta(days=7)
+    month_later = now + timedelta(days=30)
+    
+    challenges_data = [
+        {
+            "name": "Weekly Push-up Challenge",
+            "description": "Complete 100 push-ups this week",
+            "type": "weekly",
+            "goal_type": "reps",
+            "goal_value": 100,
+            "start_date": now,
+            "end_date": week_later,
+            "rewards": ["Weekly Champion Badge", "200 points"],
+            "created_by": "system"
+        },
+        {
+            "name": "Daily Mobility Quest",
+            "description": "Complete mobility exercises for 7 consecutive days",
+            "type": "weekly",
+            "goal_type": "consistency",
+            "goal_value": 7,
+            "start_date": now,
+            "end_date": week_later,
+            "rewards": ["Mobility Master Badge", "150 points"],
+            "created_by": "system"
+        },
+        {
+            "name": "30-Day Transformation",
+            "description": "Log progress every day for 30 days",
+            "type": "monthly",
+            "goal_type": "consistency",
+            "goal_value": 30,
+            "start_date": now,
+            "end_date": month_later,
+            "rewards": ["Transformation Champion", "500 points"],
+            "created_by": "system"
+        }
+    ]
+    
+    for challenge_data in challenges_data:
+        challenge = Challenge(**challenge_data)
+        await db.challenges.insert_one(challenge.dict())
+
+async def initialize_chat_channels():
+    """Initialize chat channels"""
+    
+    existing_channels = await db.chat_channels.count_documents({})
+    if existing_channels > 0:
+        return
+    
+    channels_data = [
+        {
+            "name": "General Discussion",
+            "description": "General fitness discussion and motivation",
+            "type": "general"
+        },
+        {
+            "name": "Workout Chat",
+            "description": "Share your workouts and get feedback",
+            "type": "workout_chat"
+        },
+        {
+            "name": "Mobility & Recovery",
+            "description": "Discuss mobility, stretching, and recovery",
+            "type": "mobility_chat"
+        },
+        {
+            "name": "Beginner Help",
+            "description": "Questions and support for beginners",
+            "type": "beginner_help"
+        },
+        {
+            "name": "Advanced Training",
+            "description": "Advanced techniques and challenges",
+            "type": "advanced_training"
+        }
+    ]
+    
+    for channel_data in channels_data:
+        channel = ChatChannel(**channel_data)
+        await db.chat_channels.insert_one(channel.dict())
+
 # ========== AUTH ROUTES ==========
 
 @api_router.post("/auth/register")
