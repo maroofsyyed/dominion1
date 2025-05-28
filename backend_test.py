@@ -319,8 +319,9 @@ def run_all_tests():
     if not token:
         token = run_test("User Login", test_user_login)
     
+    user_data = None
     if token:
-        run_test("Get Current User", test_get_current_user, token)
+        user_data = run_test("Get Current User", test_get_current_user, token)
     
     # 2. Exercise Database
     exercises = run_test("Get Exercises", test_get_exercises)
@@ -331,8 +332,8 @@ def run_all_tests():
     run_test("Get Pillars", test_get_pillars)
     
     # 3. Progress Tracking System
-    if token and exercises:
-        progress_entry = run_test("Log Progress", test_log_progress, token, exercises)
+    if token and exercises and user_data:
+        progress_entry = run_test("Log Progress", test_log_progress, token, exercises, user_data)
         progress_entries = run_test("Get User Progress", test_get_user_progress, token)
         if progress_entry:
             run_test("Get Exercise Progress", test_get_exercise_progress, token, exercises, progress_entry)
@@ -356,8 +357,8 @@ def run_all_tests():
     run_test("Get Leaderboard", test_get_leaderboard)
     
     # 7. Workout Management
-    if token and exercises:
-        workout = run_test("Create Workout", test_create_workout, token, exercises)
+    if token and exercises and user_data:
+        workout = run_test("Create Workout", test_create_workout, token, exercises, user_data)
         run_test("Get User Workouts", test_get_user_workouts, token)
     
     # Print summary
