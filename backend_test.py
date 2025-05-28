@@ -150,7 +150,7 @@ def test_get_pillars():
     return pillars
 
 # 3. Test Progress Tracking System
-def test_log_progress(token, exercises):
+def test_log_progress(token, exercises, user_data):
     if not exercises:
         return None
     
@@ -159,7 +159,8 @@ def test_log_progress(token, exercises):
         "exercise_id": exercise_id,
         "reps": 10,
         "sets": 3,
-        "notes": "Test progress entry"
+        "notes": "Test progress entry",
+        "user_id": user_data["id"]
     }
     
     headers = {"Authorization": f"Bearer {token}"}
