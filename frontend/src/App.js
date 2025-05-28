@@ -1494,119 +1494,202 @@ const ContactPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 pt-20">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
-        >
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Get in Touch
-          </h1>
-          <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-            Have questions about your fitness journey? We're here to help.
-          </p>
-        </motion.div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
+      {/* Hero Section */}
+      <div className="bg-gradient-to-r from-blue-600 to-purple-600 py-20">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-5xl md:text-6xl font-bold text-white mb-6"
           >
-            <h2 className="text-2xl font-bold text-white mb-6">Contact Information</h2>
-            
-            <div className="space-y-6">
-              <div className="flex items-center">
-                <MessageCircle className="text-blue-400 mr-4" size={24} />
-                <div>
-                  <h3 className="font-semibold text-white">Email</h3>
-                  <p className="text-gray-400">support@dominion.fitness</p>
-                </div>
-              </div>
-              
-              <div className="flex items-center">
-                <Users className="text-blue-400 mr-4" size={24} />
-                <div>
-                  <h3 className="font-semibold text-white">Community</h3>
-                  <p className="text-gray-400">Join our Discord server</p>
-                </div>
-              </div>
-              
-              <div className="flex items-center">
-                <Heart className="text-blue-400 mr-4" size={24} />
-                <div>
-                  <h3 className="font-semibold text-white">Social Media</h3>
-                  <p className="text-gray-400">Follow us @dominion_fitness</p>
-                </div>
-              </div>
-            </div>
-          </motion.div>
+            Get in Touch
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-xl text-blue-100 max-w-3xl mx-auto"
+          >
+            Have questions about your fitness journey? Need guidance on your calisthenics progression? We're here to help you dominate your goals.
+          </motion.p>
+        </div>
+      </div>
 
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          {/* Contact Information Cards */}
+          <div className="space-y-8">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl p-6 text-white"
+            >
+              <div className="flex items-center mb-4">
+                <MessageCircle className="text-blue-200 mr-4" size={32} />
+                <h3 className="text-xl font-bold">Email Support</h3>
+              </div>
+              <p className="text-blue-100 mb-3">Get expert guidance and support</p>
+              <a 
+                href="mailto:maroof@dominionvault.com"
+                className="text-white font-semibold hover:text-blue-200 transition-colors"
+              >
+                maroof@dominionvault.com
+              </a>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.1 }}
+              className="bg-gradient-to-br from-purple-600 to-purple-700 rounded-xl p-6 text-white"
+            >
+              <div className="flex items-center mb-4">
+                <Users className="text-purple-200 mr-4" size={32} />
+                <h3 className="text-xl font-bold">Community</h3>
+              </div>
+              <p className="text-purple-100 mb-3">Join our fitness community</p>
+              <span className="text-white font-semibold">Discord Server</span>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+              className="bg-gradient-to-br from-green-600 to-green-700 rounded-xl p-6 text-white"
+            >
+              <div className="flex items-center mb-4">
+                <Heart className="text-green-200 mr-4" size={32} />
+                <h3 className="text-xl font-bold">Social Media</h3>
+              </div>
+              <p className="text-green-100 mb-3">Follow our journey</p>
+              <span className="text-white font-semibold">@dominion_fitness</span>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.3 }}
+              className="bg-gradient-to-br from-yellow-600 to-orange-600 rounded-xl p-6 text-white"
+            >
+              <div className="flex items-center mb-4">
+                <Shield className="text-yellow-200 mr-4" size={32} />
+                <h3 className="text-xl font-bold">Expert Coaching</h3>
+              </div>
+              <p className="text-yellow-100 mb-3">Personal training available</p>
+              <span className="text-white font-semibold">1-on-1 Sessions</span>
+            </motion.div>
+          </div>
+
+          {/* Contact Form */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
-            className="bg-gray-800 rounded-xl p-8"
+            className="lg:col-span-2"
           >
-            <h2 className="text-2xl font-bold text-white mb-6">Send us a Message</h2>
-            
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label className="text-gray-300">Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="w-full mt-2 p-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none"
-                  required
-                />
+            <div className="bg-gray-800 rounded-xl p-8 shadow-2xl">
+              <div className="text-center mb-8">
+                <h2 className="text-3xl font-bold text-white mb-4">Send us a Message</h2>
+                <p className="text-gray-400">We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
               </div>
               
-              <div>
-                <label className="text-gray-300">Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="w-full mt-2 p-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none"
-                  required
-                />
-              </div>
-              
-              <div>
-                <label className="text-gray-300">Subject</label>
-                <input
-                  type="text"
-                  name="subject"
-                  value={formData.subject}
-                  onChange={handleChange}
-                  className="w-full mt-2 p-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none"
-                  required
-                />
-              </div>
-              
-              <div>
-                <label className="text-gray-300">Message</label>
-                <textarea
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  rows={6}
-                  className="w-full mt-2 p-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none resize-none"
-                  required
-                />
-              </div>
-              
-              <button
-                type="submit"
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition-colors"
-              >
-                Send Message
-              </button>
-            </form>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="text-gray-300 text-sm font-semibold">Name *</label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      className="w-full mt-2 p-4 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none transition-colors"
+                      placeholder="Your full name"
+                      required
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="text-gray-300 text-sm font-semibold">Email *</label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="w-full mt-2 p-4 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none transition-colors"
+                      placeholder="your.email@example.com"
+                      required
+                    />
+                  </div>
+                </div>
+                
+                <div>
+                  <label className="text-gray-300 text-sm font-semibold">Subject *</label>
+                  <select
+                    name="subject"
+                    value={formData.subject}
+                    onChange={handleChange}
+                    className="w-full mt-2 p-4 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none transition-colors"
+                    required
+                  >
+                    <option value="">Select a subject</option>
+                    <option value="General Inquiry">General Inquiry</option>
+                    <option value="Training Questions">Training Questions</option>
+                    <option value="Technical Support">Technical Support</option>
+                    <option value="Partnership">Partnership Opportunity</option>
+                    <option value="Feedback">Feedback</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="text-gray-300 text-sm font-semibold">Message *</label>
+                  <textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    rows={6}
+                    className="w-full mt-2 p-4 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none resize-none transition-colors"
+                    placeholder="Tell us how we can help you..."
+                    required
+                  />
+                </div>
+                
+                <button
+                  type="submit"
+                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-4 rounded-lg font-semibold transition-all transform hover:scale-105 flex items-center justify-center"
+                >
+                  <MessageCircle className="mr-2" size={20} />
+                  Send Message
+                </button>
+              </form>
+            </div>
           </motion.div>
         </div>
+
+        {/* FAQ Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          className="mt-20"
+        >
+          <h2 className="text-3xl font-bold text-white text-center mb-12">Frequently Asked Questions</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="bg-gray-800 rounded-xl p-6">
+              <h3 className="text-xl font-bold text-white mb-3">How do I start my calisthenics journey?</h3>
+              <p className="text-gray-400">Begin with the beginner exercises in each pillar. Focus on proper form and gradual progression through our structured skill trees.</p>
+            </div>
+            <div className="bg-gray-800 rounded-xl p-6">
+              <h3 className="text-xl font-bold text-white mb-3">Is Dominion suitable for beginners?</h3>
+              <p className="text-gray-400">Absolutely! Our progression system starts from complete beginner level and guides you step-by-step to advanced skills.</p>
+            </div>
+            <div className="bg-gray-800 rounded-xl p-6">
+              <h3 className="text-xl font-bold text-white mb-3">How often should I train?</h3>
+              <p className="text-gray-400">We recommend 3-4 training sessions per week, allowing adequate rest for muscle recovery and growth.</p>
+            </div>
+            <div className="bg-gray-800 rounded-xl p-6">
+              <h3 className="text-xl font-bold text-white mb-3">Can I track my progress?</h3>
+              <p className="text-gray-400">Yes! Log your workouts, track your reps and sets, and visualize your progress with our comprehensive analytics.</p>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </div>
   );
