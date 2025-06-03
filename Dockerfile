@@ -28,8 +28,8 @@ COPY nginx.conf /etc/nginx/nginx.conf
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-# Install Python and dependencies
-RUN apk add --no-cache python3 py3-pip \
+# Install Python, supervisor and dependencies
+RUN apk add --no-cache python3 py3-pip supervisor \
     && pip3 install --break-system-packages -r /backend/requirements.txt
 
 # Add env variables if needed
