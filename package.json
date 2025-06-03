@@ -1,0 +1,9 @@
+{
+  "name": "dominion-fitness",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "cd frontend && yarn start",
+    "dev": "cd frontend && yarn start"
+  }
+}
